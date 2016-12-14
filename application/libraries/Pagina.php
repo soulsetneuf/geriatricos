@@ -2,6 +2,13 @@
 
 class Pagina {
     var $arrData=array();
+    function my_form_dropdown($result_array,$id,$value){
+            $options = array();
+            foreach ($result_array as $val){
+                $options[$val[$id]] = $val[$value];
+            }
+            return $options;
+    }
       public function header($data,$ci)
       {
             $ci->load->view('/plantilla/head', $data);
@@ -15,9 +22,10 @@ class Pagina {
         $arrFiltros = array('usuario_id' => $CI->session->userdata('id'));
         $usuario=$CI->base->buscar_registro($strNombreTabla,$arrFiltros,$CI,true);
         $nombre_completo=$usuario[0]->persona_nombres." ".$usuario[0]->persona_app_pat." ".$usuario[0]->persona_app_pat;
+
         $this->arrData['titulo_pagina']="Administrador";
         $this->arrData['nombre_usuario']=$nombre_completo;
-        $this->arrData['edad']=$CI->persona_model->CalculaEdad($usuario[0]->persona_fecha_nac);
+        $this->arrData['admin_id'] = $CI->session->userdata('id');
     }
     public function datos_personales_adulto_mayor($id,$CI)
     {
@@ -38,6 +46,13 @@ class Pagina {
     public function getArrData()
     {
         return $this->arrData;
+    }
+    public function verificarURL($id,$CI,$url,$nombreTabla,$arrFiltros)
+    {
+        if(is_numeric($id)==false)
+            redirect($url);
+        if($CI->base->buscar_registro($nombreTabla,$arrFiltros,$CI,false)==false)
+            redirect($url);
     }
 }
 ?>

@@ -8,14 +8,14 @@ class Base {
        else
        	$controlador->db->insert($tabla,$controlador->input->post());
       }
-      function datos_repetidos($strNombreTabla,$controlador,$arrFiltros)
-      {
+    function datos_repetidos($strNombreTabla,$controlador,$arrFiltros)
+    {
       	$query = $controlador->db->get_where($strNombreTabla,$arrFiltros);
       	if ($query->num_rows() > 0)
       		return true;
       	else
       		return false;
-      }
+    }
    function buscar_registro($strNombreTabla,$arrFiltros,$CI,$boolResult)
    {
         $query=$CI->db->get_where($strNombreTabla,$arrFiltros);
@@ -27,6 +27,15 @@ class Base {
         else
           return false;
    }
+    function buscar_id_persona($strNombreTabla,$arrFiltros,$CI)
+    {
+        $CI->db->where($arrFiltros);
+        $query = $CI->db->get($strNombreTabla);
+        if ($query->num_rows() > 0)
+                return $query->result()[0]->persona_id;
+        else
+            return false;
+    }
     function eliminar_registro($rtNombreTabla,$arrFiltros,$CI)
     {
         $CI->db->where($arrFiltros);
